@@ -13,6 +13,7 @@ class GameGrid:
         self.n_cols = n_cols
 
         self.initialize()
+        self.display_grid()
 
     def initialize(self, type='empty'):
         self.data_array = np.zeros(self.n_rows, self.n_cols)
