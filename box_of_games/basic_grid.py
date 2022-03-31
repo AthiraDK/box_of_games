@@ -1,3 +1,4 @@
+from tkinter import LEFT
 import pygame
 import numpy as np
 from utils import get_colormap
@@ -23,6 +24,12 @@ class GameGrid:
     def update_state(self):
         # program logic here
         pass
+
+    def mouse_to_grid(self, mouse_pos):
+        i_row = (mouse_pos[0] - self.margin)//(self.margin + self.height)
+        i_col = (mouse_pos[1] - self.margin)//(self.margin + self.width)
+        grid_pos = [i_row, i_col]
+        return grid_pos
 
     def draw_grid(self):
         for i_row in range(self.n_rows):
@@ -51,9 +58,13 @@ class GameGrid:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     flag = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = pygame.mouse.get_pos()
+                    grid_pos_x, grid_pos_y = self.mouse_to_grid(mouse_pos)
+                    self.data_array[grid_pos_x, grid_pos_y] = event.button
 
             # Game Logic
-            self.data_array[1, 5] = 1
+
             # Screen-clearning
 
             # Draw
