@@ -1,8 +1,6 @@
-from tkinter import LEFT
 import pygame
 import numpy as np
 from utils import get_colormap
-# drawing the grid
 
 
 class GameGrid:
