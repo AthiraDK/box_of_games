@@ -1,6 +1,7 @@
 # https://www.askpython.com/python/examples/create-minesweeper-using-python
 
 import numpy as np
+from utils import clear_terminal
 
 
 class MineSweeper:
@@ -69,7 +70,8 @@ class MineSweeper:
         self.grid[:, :] = " "
 
     def check_gameover(self):
-        count = np.sum(self.grid != " ") + np.sum(self.grid != "F")
+        count = np.sum(self.grid != " ") - np.sum(self.grid == "F")
+        print(count, (self.grid_size)**2 - self.n_mines)
         if count == (self.grid_size)**2 - self.n_mines:
             return True
         else:
@@ -93,26 +95,26 @@ class MineSweeper:
 
         def handle_flag():
             if [row_in, col_in] in self.flags:  # already flagged
-                self.clear_terminal()
+                # clear_terminal()
                 print("Flag already set!")
                 return False
             if self.grid[row_in][col_in] != ' ':  # Cell value already displayed
-                self.clear_terminal()
+                # clear_terminal()
                 print("Value already known!")
                 return False
             if len(self.flags) < self.n_mines:
-                self.clear_terminal()
+                # clear_terminal()
                 self.flags.append([row_in, col_in])
                 self.grid[row_in][col_in] = 'F'
                 print("Flag set")
                 return True
             else:
-                self.clear_terminal()
+                # clear_terminal()
                 print("Flags finished !")
                 return None
 
         def handle_error(error='value_error', inp=[]):
-            self.clear_terminal()
+            clear_terminal()
             print("Wrong input !")
             if error == 'invalid_input_length':
                 print(f"Expected 2 or 3 entries ! Received {len(inp)} !")
@@ -120,17 +122,18 @@ class MineSweeper:
                 print("Invalid row or column number entered !")
             self.print_instruct()
             return None
+
         isflag = False
         if (len(inp) == 2) | (len(inp) == 3):  # Valid input lengths
             if (len(inp) == 3):  # Flagging mine
                 if inp[2].lower() != 'f':
-                    self.handle_error()
+                    handle_error()
                 else:
                     isflag = True
             try:
                 val = list(map(int, inp[:2]))
                 if val[0] > self.grid_size | val[0] < 1 | val[1] > self.grid_size | val[1] < 1:
-                    self.handle_error(error='invalid_in')
+                    handle_error(error='invalid_in')
                 else:
                     row_in = val[0]-1
                     col_in = val[1]-1
@@ -139,9 +142,9 @@ class MineSweeper:
                 else:
                     handled = handle_standard()  # Handle standard_input
             except ValueError:
-                self.handle_error()
+                handle_error()
         else:
-            self.handle_error(error='invalid_input_length', inp=inp)
+            handle_error(error='invalid_input_length', inp=inp)
 
     def expose_neighbours(self, row, col):
         if [row, col] not in self.visited_cells:  # cell not already visited
@@ -241,10 +244,6 @@ class MineSweeper:
             print(cell_d)
         print()
 
-    def clear_terminal(self):
-        import os
-        os.system('clear')
-
 # class MineSweeperGUI:
 #     def __init__(self):
 #         pass
@@ -255,6 +254,7 @@ if __name__ == "__main__":
 
     # The Game Loop
     while not ms_game.game_over:
+        clear_terminal()
         ms_game.print_layout()
         inp = input(
             "Enter row number followed by space and column number= ").split()
@@ -267,4 +267,6 @@ if __name__ == "__main__":
             print("Congratulations !!!! YOU WIN !!!!")
             ms_game.game_over = True
             continue
-        ms_game.clear_terminal()
+
+        # else:
+        #     clear_terminal()
