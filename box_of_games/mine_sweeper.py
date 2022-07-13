@@ -1,12 +1,13 @@
 # https://www.askpython.com/python/examples/create-minesweeper-using-python
 
 import numpy as np
-from utils import clear_terminal
+from utils import clear_terminal, print_layout
 
 
 class MineSweeper:
     def __init__(self, grid_size=10, n_mines=8):
         # variables
+        self.game_name = "MINESWEEPER"
         self.grid_size = grid_size
         if n_mines >= 1:
             self.n_mines = n_mines
@@ -83,7 +84,8 @@ class MineSweeper:
             if self.state[row_in][col_in] == -1:  # GAME OVER
                 self.grid[row_in][col_in] = 'M'
                 self.show_mines()
-                self.print_layout()
+                # self.print_layout()
+                print_layout(self.grid_size, self.grid, self.game_name)
                 print("Landed on a mine ! GAME OVER !!!")
                 self.game_over = True
             elif self.state[row_in][col_in] == 0:
@@ -194,55 +196,6 @@ class MineSweeper:
             "2. In order to flag a mine, enter F after row and column numbers, example '2 3 F'")
         print()
 
-    def print_layout(self):
-        # printing minesweeper layout
-
-        gap = int(((4 + 6*self.grid_size) - 12)/2)
-        print()
-        title = ""
-        for i in range(gap*2):
-            if i == gap+1:
-                title += "MINESWEEPER"
-            else:
-                title += " "
-        print(title)
-        print()
-
-        cell_col = "    "
-        for col in range(self.grid_size):
-            if col < 9:
-                cell_col += "  " + str(col+1) + "   "
-            else:
-                cell_col += " " + str(col+1) + "   "
-        print(cell_col)
-
-        cell_upp = "   "
-        for col in range(self.grid_size):
-            cell_upp += "______"
-        print(cell_upp)
-
-        cell_u = "   "
-        for col in range(self.grid_size):
-            cell_u += "|     "
-        cell_u += '|'
-
-        cell_d = "   "
-        for col in range(self.grid_size):
-            cell_d += "|_____"
-        cell_d += '|'
-
-        for row in range(self.grid_size):
-            print(cell_u)
-            if row < 9:
-                cell_m = str(row + 1) + '  |'
-            else:
-                cell_m = str(row + 1) + ' |'
-            for col in range(self.grid_size):
-                # cell_m += "  " + str(self.state[row][col]) + "  |"
-                cell_m += "  " + self.grid[row][col] + "  |"
-            print(cell_m)
-            print(cell_d)
-        print()
 
 # class MineSweeperGUI:
 #     def __init__(self):
@@ -255,7 +208,8 @@ if __name__ == "__main__":
     # The Game Loop
     while not ms_game.game_over:
         clear_terminal()
-        ms_game.print_layout()
+        # ms_game.print_layout()
+        print_layout(ms_game.grid_size, ms_game.grid, ms_game.game_name)
         inp = input(
             "Enter row number followed by space and column number= ").split()
 
@@ -263,7 +217,8 @@ if __name__ == "__main__":
 
         if(ms_game.check_gameover()):
             ms_game.show_mines()
-            ms_game.print_layout()
+            # ms_game.print_layout()
+            print_layout(ms_game.grid_size, ms_game.grid, ms_game.game_name)
             print("Congratulations !!!! YOU WIN !!!!")
             ms_game.game_over = True
             continue
