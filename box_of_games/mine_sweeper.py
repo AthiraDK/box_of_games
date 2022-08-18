@@ -16,12 +16,12 @@ class MineSweeper:
         self.flags = []
         self.visited_cells = []
         self.game_over = False
+        self.win = False
         # call functions to intialize the game
         self.setup_mines()
         self.update_gridvals()
         self.setup_displaygrid()
         self.print_instruct()
-        # self.print_layout()
 
     def setup_mines(self):
         import random
@@ -66,14 +66,15 @@ class MineSweeper:
 
     def setup_displaygrid(self):
         self.grid = np.empty_like(self.state, dtype='object')
-        # self.grid[self.state == 1] = "M"
-        # self.grid[self.state == 0] = " "
         self.grid[:, :] = " "
 
     def check_gameover(self):
         count = np.sum(self.grid != " ") - np.sum(self.grid == "F")
         print(count, (self.grid_size)**2 - self.n_mines)
         if count == (self.grid_size)**2 - self.n_mines:
+
+            self.win = True
+            self.game_over = True
             return True
         else:
             return False
@@ -87,6 +88,7 @@ class MineSweeper:
                 # self.print_layout()
                 print_layout(self.grid_size, self.grid, self.game_name)
                 print("Landed on a mine ! GAME OVER !!!")
+                self.win = False
                 self.game_over = True
             elif self.state[row_in][col_in] == 0:
                 self.grid[row_in][col_in] = '0'
@@ -215,12 +217,15 @@ if __name__ == "__main__":
 
         ms_game.handle_input(inp)
 
-        if(ms_game.check_gameover()):
+        if(ms_game.check_gameover()):  # Game over by winning or landing on a mine !
             ms_game.show_mines()
             # ms_game.print_layout()
-            print_layout(ms_game.grid_size, ms_game.grid, ms_game.game_name)
-            print("Congratulations !!!! YOU WIN !!!!")
-            ms_game.game_over = True
+
+            if ms_game.win == True:
+                print_layout(ms_game.grid_size,
+                             ms_game.grid, ms_game.game_name)
+                print("Congratulations !!!! YOU WIN !!!!")
+            # ms_game.game_over = True
             continue
 
         # else:
